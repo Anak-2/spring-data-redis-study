@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -34,8 +36,9 @@ public class JwtController {
 
 //    재 로그인
     @PostMapping("/reLogin")
-    public String reLogin(HttpServletRequest request, HttpServletResponse response){
-        log.info("refreshToken = {}",request.getParameter("refreshToken"));
+    public String reLogin(HttpServletRequest request){
+
+        log.info("refreshToken = {}",request.getAttribute("refreshAccessToken"));
         return "reLogin";
     }
 }

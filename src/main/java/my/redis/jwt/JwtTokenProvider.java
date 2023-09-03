@@ -60,16 +60,20 @@ public class JwtTokenProvider {
     //   유효하면 refresh token 재발급 & access token 재발급
     public static String refreshAccessToken(String accessToken, String refreshToken){
         try{
-            // access token 검증 & username 꺼내기
+            log.info("Username 꺼내기");
+            // username 꺼내기
             DecodedJWT jwt = JWT.decode(accessToken);
             String username = jwt.getClaim("username").asString();
 
+
+            log.info("Refresh Token 검증");
             // refresh token 검증
             if(refreshRepository.getRefresh(username) == null) {
                 refreshRepository.deleteRefresh(username);
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Refresh is different");
             }
 
+            log.info("Refresh Token Decode");
             DecodedJWT rJwt = JWT.require(HMAC512(secretKey)).build()
                     .verify(refreshToken);
 

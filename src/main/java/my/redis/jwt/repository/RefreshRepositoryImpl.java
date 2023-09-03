@@ -1,6 +1,7 @@
 package my.redis.jwt.repository;
 
 import jakarta.annotation.Resource;
+import my.redis.jwt.JwtTokenProvider;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ public class RefreshRepositoryImpl implements RefreshRepository{
 
     @Override
     public void saveRefresh(String username, String refreshToken) {
+        refreshToken = refreshToken.replace(JwtTokenProvider.BEARER_TYPE, "");
         hashOperations.putIfAbsent(hashReference, username, refreshToken);
     }
 

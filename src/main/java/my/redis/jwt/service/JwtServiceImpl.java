@@ -41,12 +41,13 @@ public class JwtServiceImpl implements JwtService{
 //        ToDo: Redis 버전 6.2.3 부터 GETDEL 을 지원한다는데 GETDEL 명령어가 없다는 오류 계속 발생
 //              출처: https://github.com/redis/redis-doc/issues/1939
 //        vop.getAndDelete(username);
-        vop.set(username,"",1);
+//        vop.set(username,"",1); // delete refresh
+        refreshRepository.deleteRefresh(username);
 
         String accessToken = JwtTokenProvider.generateAccessToken(username);
 
         String refreshToken = JwtTokenProvider.generateRefreshToken();
-        vop.set(username, refreshToken);
+        refreshRepository.saveRefresh(username, refreshToken);
 
         Cookie cookie = new Cookie("refreshToken", URLEncoder.encode(refreshToken, "UTF-8"));
         cookie.setPath("/");
